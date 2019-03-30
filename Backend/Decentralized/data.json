@@ -1,0 +1,41 @@
+{
+    "abi": [
+        {
+            "constant": false,
+            "inputs": [
+                {
+                    "name": "url",
+                    "type": "string"
+                },
+                {
+                    "name": "hash",
+                    "type": "uint"
+                }
+            ],
+            "name": "setHash",
+            "outputs": [],
+            "payable": false,
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "constant": false,
+            "inputs": [],
+            "name": "getHash",
+            "outputs": [
+                {
+                    "name": "",
+                    "type": "string"
+                },
+                {
+                    "name": "",
+                    "type": "uint"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "nonpayable",
+            "type": "function"
+        }
+    ],
+    "contract_address": "0x978D43195Dc4a58168AA3d8d94610981ecC963af"
+}
