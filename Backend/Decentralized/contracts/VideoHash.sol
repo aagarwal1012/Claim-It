@@ -1,6 +1,6 @@
-pragma solidity ^0.5.6;
+pragma solidity ^0.5.0;
 
-contract HashRecords {
+contract VideoHash {
     
     string url;
     uint generated_hash;
