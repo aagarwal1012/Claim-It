@@ -39,6 +39,35 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class MainActivity extends Activity implements SensorEventListener {
+
+    private static final int FORCE_THRESHOLD = 10000;
+    private static final int TIME_THRESHOLD = 75;
+    private static final int SHAKE_TIMEOUT = 500;
+    private static final int SHAKE_DURATION = 150;
+    private static final int SHAKE_COUNT = 1;
+    private int mShakeCount = 0;
+    private long mLastShake;
+    private long mLastForce;
+    private float mLastX = -1.0f, mLastY = -1.0f, mLastZ = -1.0f;
+    private long mLastTime;
+    float x,y,z;
+    private float[] mGravity = { 0.0f, 0.0f, 0.0f };
+    private float[] mLinearAcceleration = { 0.0f, 0.0f, 0.0f };
+    private static final int X = 0;
+    private static final int Y = 1;
+    private static final int Z = 2;
+    long startTime = 0;
+    private float Current = 0.0f;
+    int moveCount = 0;
+    // Minimum acceleration needed to count as a shake movement
+    private static final int MIN_SHAKE_ACCELERATION = 10;
+
+    // Minimum number of movements to register a shake
+    private static final int MIN_MOVEMENTS = 1;
+
+    // Maximum time (in milliseconds) for the whole shake to occur
+    private static final int MAX_SHAKE_DURATION = 500;
+
     int quality = 0;
     int rate = 100;
     String timeStampFile;
@@ -59,11 +88,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     float dist[] = {0, 0, 0};
     PrintWriter writer = null;
     long timechecker = 5000;
-    float rotv_x = 0;
-    float rotv_y = 0;
-    float rotv_z = 0;
-    float rotv_w = 0;
-    float rotv_accuracy = 0;
+
     String[] options = {"1080p", "720p", "480p"};
     String[] options1 = {"15 Hz", "10 Hz"};
     String[] options2 = {"10 fps", "20 fps", "30 fps"};
@@ -146,10 +171,8 @@ public class MainActivity extends Activity implements SensorEventListener {
         }
     };
     private SensorManager sensorManager;
-    //private Sensor accelerometer;
-    //private Sensor head;
-    //private Sensor gyro;
-    private Sensor rotv;
+    private Sensor accelerometer;
+    private Sensor gyro;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -161,7 +184,8 @@ public class MainActivity extends Activity implements SensorEventListener {
         //accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
         //head = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
         //gyro = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
-        rotv = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
+        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        gyro = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
 
         cameraPreview = (FrameLayout) findViewById(R.id.camera_preview);
 
@@ -177,14 +201,6 @@ public class MainActivity extends Activity implements SensorEventListener {
 
         vid = (ImageButton) findViewById(R.id.imageButton);
         vid.setVisibility(View.GONE);
-
-        /*
-        tv = (TextView) findViewById(R.id.textViewHeading);
-        String setTextText = "Heading: " + heading + " Speed: " + speed;
-        tv.setText(setTextText);
-        */
-
-
     }
 
 
@@ -218,11 +234,8 @@ public class MainActivity extends Activity implements SensorEventListener {
             mCamera = Camera.open(findBackFacingCamera());
             mPreview.refreshCamera(mCamera);
         }
-        //sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-        //sensorManager.registerListener(this, head, SensorManager.SENSOR_DELAY_GAME);
-        //sensorManager.registerListener(this, gyro, SensorManager.SENSOR_DELAY_NORMAL);
-        sensorManager.registerListener(this, rotv, SensorManager.SENSOR_DELAY_NORMAL);
-
+        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+        sensorManager.registerListener(this, gyro, SensorManager.SENSOR_DELAY_NORMAL);
 
         locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
@@ -264,17 +277,10 @@ public class MainActivity extends Activity implements SensorEventListener {
         LM.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
     }
 
-    /*
-    float linear_acc_x = 0;
-    float linear_acc_y = 0;
-    float linear_acc_z = 0;
-
-    float heading = 0;
-
     float gyro_x = 0;
     float gyro_y = 0;
     float gyro_z = 0;
-    */
+
 
     @Override
     protected void onPause() {
@@ -321,8 +327,6 @@ public class MainActivity extends Activity implements SensorEventListener {
         else if (quality == 2)
             mediaRecorder.setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_480P));
 
-        //String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-
         mediaRecorder.setOutputFile(Environment.getExternalStorageDirectory().getPath() + "/elab/" + timeStampFile + "/" + timeStampFile + ".mp4");
         mediaRecorder.setVideoFrameRate(VideoFrameRate);
         //mediaRecorder.setMaxDuration(5000);
@@ -357,11 +361,9 @@ public class MainActivity extends Activity implements SensorEventListener {
             e.printStackTrace();
         }
 
-        //writer.println("Longitude" + "," + "Latitude" + "," + "Speed" + "," + "Distance" + "," + "Time" + "," + "Acc X" + "," + "Acc Y" + "," + "Acc Z" + "," + "Heading"
-        //        + "," + "gyro_x" + "," + "gyro_y" + "," + "gyro_z");
         writer.println("Timestamp" + "," +
                 "Longitude" + "," + "Latitude" + "," +
-                "RotationV X" + "," + "RotationV Y" + "," + "RotationV Z" + "," + "RotationV W" + "," + "RotationV Acc");
+                "Acc x" + "," + "Acc Y" + "," + "Acc Z" + "," + "gyro_x" + "," + "gyro_y" + "," + "gyro_z");
         LocationManager original = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -388,14 +390,9 @@ public class MainActivity extends Activity implements SensorEventListener {
             latitude_original = original_location.getLatitude();
             longitude_original = original_location.getLongitude();
         }
-        //String setTextText = "Heading: " + heading + " Speed: " + speed;
-        //tv.setText(setTextText);
+
         timer = new Timer();
         timer.schedule(new SayHello(), 0, rate);
-        /*if(clickFlag == 1) {
-            capture.performClick();
-        }
-        */
     }
 
     public void enddata() {
@@ -408,154 +405,165 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        if (event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR) {
-            rotv_x = event.values[0];
-            rotv_y = event.values[1];
-            rotv_z = event.values[2];
-            rotv_w = event.values[3];
-            rotv_accuracy = event.values[4];
-        }
-        /*
-        if(event.sensor.getType() == Sensor.TYPE_LINEAR_ACCELERATION) {
-            linear_acc_x = event.values[0];
-            linear_acc_y = event.values[1];
-            linear_acc_z = event.values[2];
-        }
-        else if (event.sensor.getType() == Sensor.TYPE_ORIENTATION) {
-            heading = Math.round(event.values[0]);
-            if(heading >= 270){
-                heading = heading + 90;
-                heading = heading - 360;
+        // This method will be called when the accelerometer detects a change.
+
+        // Call a helper method that wraps code from the Android developer site
+        setCurrentAcceleration(event);
+        // Get the max linear acceleration in any direction
+        float maxLinearAcceleration = getMaxCurrentLinearAcceleration();
+
+        // Check if the acceleration is greater than our minimum threshold
+        if (maxLinearAcceleration > MIN_SHAKE_ACCELERATION) {
+            long now = System.currentTimeMillis();
+
+            // Set the startTime if it was reset to zero
+            if (startTime == 0) {
+                startTime = now;
             }
-            else{
-                heading = heading + 90;
+
+            long elapsedTime = now - startTime;
+
+            // Check if we're still in the shake window we defined
+            if (elapsedTime > MAX_SHAKE_DURATION) {
+                // Too much time has passed. Start over!
+                resetShakeDetection();
+            } else {
+                // Keep track of all the movements
+                moveCount++;
+
+                // Check if enough movements have been made to qualify as a shake
+                if (moveCount > MIN_MOVEMENTS) {
+                    // It's a shake! Notify the listener.
+                   // mShakeListener.onShake();
+
+                    // Reset for the next one!
+                    resetShakeDetection();
+                }
             }
         }
-        else if (event.sensor.getType() == Sensor.TYPE_GYROSCOPE){
-            gyro_x = event.values[0];
-            gyro_y = event.values[1];
-            gyro_z = event.values[2];
-        }
-        String setTextText = "Heading: " + heading + " Speed: " + speed;
-        tv.setText(setTextText);
-        */
     }
 
-    public void addQuality(View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        String setting = new String();
-        if (quality == 0) {
-            setting = "1080p";
-        } else if (quality == 1) {
-            setting = "720p";
-        } else if (quality == 2) {
-            setting = "480p";
-        }
-        builder.setTitle("Pick Quality, Current setting: " + setting)
-                .setItems(options, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // The 'which' argument contains the index position
-                        // of the selected item
-                        if (which == 0) {
-                            quality = 0;
-                        } else if (which == 1) {
-                            quality = 1;
-                        } else if (which == 2) {
-                            quality = 2;
+        public void addQuality (View view){
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            String setting = new String();
+            if (quality == 0) {
+                setting = "1080p";
+            } else if (quality == 1) {
+                setting = "720p";
+            } else if (quality == 2) {
+                setting = "480p";
+            }
+            builder.setTitle("Pick Quality, Current setting: " + setting)
+                    .setItems(options, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // The 'which' argument contains the index position
+                            // of the selected item
+                            if (which == 0) {
+                                quality = 0;
+                            } else if (which == 1) {
+                                quality = 1;
+                            } else if (which == 2) {
+                                quality = 2;
+                            }
                         }
-                    }
-                });
-        builder.show();
+                    });
+            builder.show();
+        }
+
+        public void addRate (View view){
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            String setting = new String();
+            if (rate == 100) {
+                setting = "10 Hz";
+            } else if (rate == 67) {
+                setting = "15 Hz";
+            }
+            builder.setTitle("Pick Data Save Rate, Current setting: " + setting)
+                    .setItems(options1, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // The 'which' argument contains the index position
+                            // of the selected item
+                            if (which == 0) {
+                                rate = 67;
+                            } else if (which == 1) {
+                                rate = 100;
+                            }
+                        }
+                    });
+            builder.show();
+        }
+
+        public void addFrameRate (View view){
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            String setting = new String();
+            if (VideoFrameRate == 10) {
+                setting = "10 fps";
+            } else if (VideoFrameRate == 20) {
+                setting = "20 fps";
+            } else if (VideoFrameRate == 30) {
+                setting = "30 fps";
+            }
+            builder.setTitle("Pick Video fps, Current setting: " + setting)
+                    .setItems(options2, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // The 'which' argument contains the index position
+                            // of the selected item
+                            if (which == 0) {
+                                VideoFrameRate = 10;
+                            } else if (which == 1) {
+                                VideoFrameRate = 20;
+                            } else if (which == 2) {
+                                VideoFrameRate = 30;
+                            }
+                        }
+                    });
+            builder.show();
+        }
+
+    private void setCurrentAcceleration(SensorEvent event) {
+        final float alpha = 0.8f;
+
+        // Gravity components of x, y, and z acceleration
+        mGravity[X] = alpha * mGravity[X] + (1 - alpha) * event.values[X];
+        mGravity[Y] = alpha * mGravity[Y] + (1 - alpha) * event.values[Y];
+        mGravity[Z] = alpha * mGravity[Z] + (1 - alpha) * event.values[Z];
+
+        // Linear acceleration along the x, y, and z axes (gravity effects removed)
+        mLinearAcceleration[X] = event.values[X] - mGravity[X];
+        mLinearAcceleration[Y] = event.values[Y] - mGravity[Y];
+        mLinearAcceleration[Z] = event.values[Z] - mGravity[Z];
+
+        Current = Math.round(Math.sqrt(mLinearAcceleration[X] * mLinearAcceleration[X] + mLinearAcceleration[Y] * mLinearAcceleration[Y] + mLinearAcceleration[Z] * mLinearAcceleration[Z]));
     }
 
-    public void addRate(View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        String setting = new String();
-        if (rate == 100) {
-            setting = "10 Hz";
-        } else if (rate == 67) {
-            setting = "15 Hz";
-        }
-        builder.setTitle("Pick Data Save Rate, Current setting: " + setting)
-                .setItems(options1, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // The 'which' argument contains the index position
-                        // of the selected item
-                        if (which == 0) {
-                            rate = 67;
-                        } else if (which == 1) {
-                            rate = 100;
-                        }
-                    }
-                });
-        builder.show();
+    private float getMaxCurrentLinearAcceleration() {
+        // Start by setting the value to the x value
+        float maxLinearAcceleration = Current;
+
+        // Return the greatest value
+        return maxLinearAcceleration;
     }
 
-    public void addFrameRate(View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        String setting = new String();
-        if (VideoFrameRate == 10) {
-            setting = "10 fps";
-        } else if (VideoFrameRate == 20) {
-            setting = "20 fps";
-        } else if (VideoFrameRate == 30) {
-            setting = "30 fps";
-        }
-        builder.setTitle("Pick Video fps, Current setting: " + setting)
-                .setItems(options2, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // The 'which' argument contains the index position
-                        // of the selected item
-                        if (which == 0) {
-                            VideoFrameRate = 10;
-                        } else if (which == 1) {
-                            VideoFrameRate = 20;
-                        } else if (which == 2) {
-                            VideoFrameRate = 30;
-                        }
-                    }
-                });
-        builder.show();
+    private void resetShakeDetection() {
+        startTime = 0;
+        moveCount = 0;
     }
+
 
     class SayHello extends TimerTask {
-        public void run() {
-            lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                return;
-            }
-            location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            //lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100, 0, locationListener );
-            //longitude = location.getLongitude();
-            //latitude = location.getLatitude();
-            //if(location.hasSpeed()) {
-            //  speed = location.getSpeed();
-            //}
-            //dist[0] = (float) 0.0;
-            /*
-            long elapsedMillis = SystemClock.elapsedRealtime() - chrono.getBase();
-            if(elapsedMillis >= timechecker){
-                clickFlag = 1;
-                timechecker = timechecker + 5000;
-                timer.cancel();
-                timer.purge();
-            }*/
+            public void run() {
+                lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-            /*
-            writer.println(longitude_original + "," + latitude_original + "," + speed + "," + dist[0] + "," + timeStamp + "," + linear_acc_x + "," + linear_acc_y + "," + linear_acc_z + "," +
-                    heading + "," + gyro_x + "," + gyro_y + "," + gyro_z);
-            */
-            String timeStamp = String.valueOf((new Date()).getTime());
-            writer.println(timeStamp + "," +
-                    longitude_original + "," + latitude_original + "," +
-                    rotv_x + "," + rotv_y + "," + rotv_z + "," + rotv_w + "," + rotv_accuracy);
+                    return;
+                }
+                location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+                String timeStamp = String.valueOf((new Date()).getTime());
+                writer.println(timeStamp + "," +
+                        longitude_original + "," + latitude_original + "," +
+                        x + "," + y + "," + z + "," + gyro_x + "," + gyro_y + "." + gyro_z);
+            }
         }
-    }
 }
+
