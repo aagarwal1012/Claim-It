@@ -1,0 +1,21 @@
+query fetch{
+  hint_user_info{
+      sno
+      name
+      username
+      password
+    }
+}
+
+mutation insert_hint_user_info{
+  insert_hint_user_info(
+    objects:[
+  	]
+  )
+  {
+    returning{
+      sno
+    }
+  }
+}
+
