@@ -1,5 +1,3 @@
-<!-- Copyright (C) 2019 Nikunj Gupta -->
-
 # Claim-It
 
 ## Description
@@ -30,3 +28,68 @@ insurance both for the claimers and the banks. It reduces the losses
 incurred by the bank by a significant margin and helping the authorized 
 personal to make correct decisions based on the accident report generated 
 by **Claim.it**!
+
+## Building setup
+
+### Pre Requisites
+
+Claim.it makes use of a wide array of technologies. As a result we require 
+you to install them prior to building and running our app.
+
+```
+For backend:
+ * virtualenv (optional but recommended)
+ * pip
+ * flask, flask-restful, flask-marshmallow
+ * solc, py-solc
+ * web3
+ * ganache-cli
+ * truffle
+
+For Android:
+ * None really
+```
+
+### Build and Run
+
+For Backend you will require to run centralized and decentralized sections 
+separately.
+
+### Centralized
+
+Run:
+
+```
+$ cd Centralized
+$ flask run --host=0.0.0.0 --port=80
+```
+
+If you have met the required pre-requisites, you should see a server hosted 
+locally on port 80.
+
+### Decentralized
+
+We first require to run the `ganache-cli` prior to deploying the decentralized 
+section. Run:
+
+```
+$ ganache-cli
+```
+
+Now, change directory to **Decentralized/flask** and run:
+
+```
+$ flask run --host=0.0.0.0 --port=1337
+```
+
+If you have met the required pre-requisites, you should see a server hosted 
+locally on port 1337.
+
+### Android
+
+To simplify the user end, we have provided the link for the apk. Install the 
+(APK)[https://drive.google.com/open?id=1he3rvAK6NW9y4zLg_o5k6_-q75IIRXCY] and play around.
+
+## License
+
+Claim.it is licensed under GNU GPL V3.0
