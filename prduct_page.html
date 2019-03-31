@@ -1,0 +1,348 @@
+
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>Claim.it</title>
+    <meta charSet="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="A solution to hassle free insurance claim ">
+    <meta property="og:image" content="">
+    <link rel="shortcut icon" href="https://www.launchaco.com/static/favicon.ico" />
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://www.launchaco.com/static/AllTemplates.min.css">
+
+    <style>
+      .launchaco-promo {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      cursor: pointer;
+      width: 0;
+      height: 0;
+      z-index: 999999;
+    }
+    .launchaco-promo__active {
+      width: initial;
+      height: initial;
+    }
+    .launchaco-promo-speechbubble {
+      font-family: -apple-system, BlinkMacSystemFont, Roboto, "Open Sans", "Helvetica Neue", sans-serif;
+      position: absolute;
+      left: 50px;
+      top: -11px;
+      padding: 9px;
+      color: white;
+      border-radius: 3px;
+      background: linear-gradient(#227ef7, #1290fc);
+      font-size: 14px;
+      font-weight: 600;
+      width: 93px;
+      box-sizing: border-box;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .15s ease-in-out;
+    }
+    .launchaco-promo__active:hover .launchaco-promo-speechbubble {
+      opacity: 1;
+    }
+    .launchaco-promo svg {
+      transition: all .3s ease-in-out;
+      opacity: 0;
+    }
+    .launchaco-promo__active svg {
+      opacity: 1;
+    }
+    .launchaco-promo-speechbubble:before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      transform: rotate(45deg);
+      left: -4px;
+      bottom: 10px;
+      border-radius: 3px;
+      background: #1290fc;
+      z-index: 2;
+      position: absolute
+    }
+    .launchaco-promo__active .launchaco-promo-speechbubble__animate {
+      animation: popinpopup 3s linear forwards 0.1s;
+    }
+    @keyframes popinpopup {
+      0% {
+        opacity: 0;
+        transform: translate3d(0,3px,0)
+      }
+      7%,93% {
+        opacity: 1;
+        transform: translate3d(0,0,0)
+      }
+      100% {
+        opacity: 0;
+        transform: translate3d(0,-4px,0)
+      }
+    }
+    .launchaco-promo-animate:hover {
+      opacity: 1 !important;
+    }
+  </style>
+
+
+    <style>
+
+    </style>
+  </head>
+
+  <body class="font-friendly">
+    <div class="black-flat">
+      <!---->
+      <header class="header">
+        <div class="container-lrg">
+          <div class="flex col-12 spread"><a class="logo primary-color launchaco-builder-hoverable logo">Claim.it</a> <a href="mailto:aagarwal9782@gmail.com" class="nav-link secondary-color mr0">Contact</a></div>
+        </div>
+      </header>
+      <section class="section">
+        <div class="container mb40">
+          <div class="col-12 text-center">
+            <h1 class="heading-lrg primary-color launchaco-builder-hoverable">Insurance.Claim.Simplified</h1>
+            <h2 class="subheading secondary-color mt20 launchaco-builder-hoverable">At Claim.it we aim to simplify the process of insurance claim significantly reducing the efforts from the bank's end.</h2>
+            <div class="mt40"><a href="http://claim-it.tech" target="_blank" class="button mobile-text-center mt10 launchaco-builder-hoverable mobile-text-center accent-bg primary-color"> <span> Get Started Now </span></a></div>
+          </div>
+        </div>
+        <div class="container-lrg">
+          <div class="col-12">
+            <div class="browserphone launchaco-builder-hoverable">
+              <div class="browserphone-browser ">
+                <div class="mask"><img src="https://cdn.launchaco.com/images/d1dd2a1f-9205-49f3-a4e7-5b2735eeca15.png" alt="Screenshot of App in Browser" class="mask-img"></div>
+              </div>
+              <div class="browserphone-iphone">
+                <div class="mask"><img src="https://cdn.launchaco.com/images/727b5d62-31c2-42b9-b1ae-28115a999803.png" alt="Screenshot of iPhone App" class="mask-img"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+    <section id="feature-1" class="section pink-white" sitemeta="[object Object]" activepage="Landing">
+      <div class="container">
+        <div class="col-12 text-center flex flex-column center-horizontal"><i class="icon secondary-bg mobile-center-icon launchaco-builder-hoverable"><svg class="svg-fill" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25">
+              <path d="M16 3.5a.5.5 0 0 1-.5.5h-5a.5.5 0 0 1 0-1h5a.5.5 0 0 1 .5.5zm5-1v20a2.503 2.503 0 0 1-2.5 2.5h-11A2.503 2.503 0 0 1 5 22.5v-20A2.503 2.503 0 0 1 7.5 0h11A2.503 2.503 0 0 1 21 2.5zm-6 20a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 .5-.5zm5-20A1.502 1.502 0 0 0 18.5 1h-11A1.502 1.502 0 0 0 6 2.5V20h14z"></path>
+            </svg></i>
+          <h3 class="heading primary-color launchaco-builder-hoverable">Why Claim.it?</h3>
+          <p class="paragraph mt20 secondary-color launchaco-builder-hoverable">Simply put, accidents happen. We can't completely get rid of them, but what we can make sure of is a legitimate compensation of the damages received at the claimers end. We add cameras to the vehicle for a 360 degree view of the vehicle. Furthermore, sensitive sensors are added that stores data relating to the position, speed, acceleration and force experienced by the car at any given moment. In case of an accident detection, we send off a 1 minute video length worth of data along with the sensor data to the bank for rightful investigation.</p>
+        </div>
+      </div>
+      <!---->
+    </section>
+    <section id="feature-2" class="section black-black" sitemeta="[object Object]" activepage="Landing">
+      <div class="container">
+        <div class="col-12 text-center flex flex-column center-horizontal"><i class="icon secondary-bg mobile-center-icon launchaco-builder-hoverable"><svg class="svg-fill" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25">
+              <path d="M13 20.5a.5.5 0 1 1-.5-.5.5.5 0 0 1 .5.5zm12-3a12.421 12.421 0 0 1-1.838 6.5H1.838A12.495 12.495 0 1 1 25 17.5zm-7.197-2.303a.5.5 0 0 0-.707 0l-3.953 3.953a1.514 1.514 0 1 0 .707.707l3.953-3.953a.5.5 0 0 0 0-.707zM23 17.5a10.5 10.5 0 0 0-21 0 .5.5 0 0 0 1 0 9.5 9.5 0 0 1 19 0 .5.5 0 0 0 1 0z"></path>
+            </svg></i>
+          <h3 class="heading primary-color launchaco-builder-hoverable">How Claim.it works?</h3>
+          <p class="paragraph mt20 secondary-color launchaco-builder-hoverable">Since we utilize video and sensory data, we gather enough data for any investigator to analyse the situation better. It reduces both costs and efforts from Bank's end. But we required transparency, after all, a bank can always tamper with the video stored on its own server. To counter this we store the url along with the hash of the video on a separate public blockchain. This introduces transparency making a simple check sum of the video as a proof of tamper.</p>
+        </div>
+      </div>
+      <!---->
+    </section>
+    <section id="team-3" class="section black-white" sitemeta="[object Object]" activepage="Landing">
+      <div class="container text-center mb35">
+        <h3 class="heading primary-color launchaco-builder-hoverable">Who are we?</h3>
+        <p class="subheading secondary-color mt20 launchaco-builder-hoverable">We are a team of aspiring developers looking forward to change the world one bit at a time.</p>
+      </div>
+      <div class="container-lrg flex wrap text-center">
+        <div class="col-4 flex mt40 launchaco-builder-hoverable">
+          <div class="team-card flex flex-column center-vertical center-horizontal w100">
+            <!---->
+            <div><b class="bold primary-color">Nikunj Gupta</b>
+              <p class="paragraph primary-color mt10">Backend Developer</p>
+              <p class="paragraph secondary-color mt20">Nikunj is proficient in the field of blockchain technology and took care of the backend services that are being used by Claim.it</p>
+            </div>
+            <!---->
+          </div>
+        </div>
+        <div class="col-4 flex mt40 launchaco-builder-hoverable">
+          <div class="team-card flex flex-column center-vertical center-horizontal w100">
+            <!---->
+            <div><b class="bold primary-color">Ayush Agarwal</b>
+              <p class="paragraph primary-color mt10">Mobile App Developer</p>
+              <p class="paragraph secondary-color mt20">Proficient in heuristics and it's application in multiple subjects, Ayush took care of formulating the visualizer and studying the sensory data.</p>
+            </div>
+            <!---->
+          </div>
+        </div>
+        <div class="col-4 flex mt40 launchaco-builder-hoverable">
+          <div class="team-card flex flex-column center-vertical center-horizontal w100">
+            <!---->
+            <div><b class="bold primary-color">Mansi Agarwal</b>
+              <p class="paragraph primary-color mt10">Mobile App Developer</p>
+              <p class="paragraph secondary-color mt20">Mansi is proficient in the field of UI/UX develoopment with experience in creating multiple Android apps over her 2 years of experience in the field.</p>
+            </div>
+            <!---->
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="faq-4" class="section black-black" sitemeta="[object Object]" activepage="Landing">
+      <div class="container text-center">
+        <div class="col-12">
+          <h3 class="heading primary-color launchaco-builder-hoverable">
+            Frequently Asked Questions
+          </h3>
+          <p class="subheading secondary-color mt20 launchaco-builder-hoverable">Can't find an answer? Don't hesitate to reach out!.</p>
+        </div>
+      </div>
+      <div class="container mt40">
+        <div class="col-12">
+          <div class="faq pad20"><input id="faq-dropdown-4-0" type="checkbox" name="faq" class="faq-input"> <label for="faq-dropdown-4-0" class="faq-label flex spread center-horizontal"><span class="bold primary-color mr20">Are we making a car's aesthetics unpleasing?</span> <svg width="15px" height="9px" viewBox="0 0 15 9" version="1.1" xmlns="http://www.w3.org/2000/svg" class="noshrink svg-fill">
+                <path d="M7.4176407,5.65342711 L1.76421359,8.8817842e-16 L0.350000024,1.41421356 L6.00342714,7.06764068 L6,7.07106781 L7.41421356,8.48528137 L7.4176407,8.48185424 L7.42106784,8.48528137 L8.8352814,7.07106781 L8.83185426,7.06764068 L14.4852814,1.41421356 L13.0710678,8.8817842e-16 L7.4176407,5.65342711 Z"></path>
+              </svg></label>
+            <p class="paragraph secondary-color faq-content mt20 launchaco-builder-hoverable">
+              A simple imagination of our project will make you think of big camera bumps everywhere on the car for the 360 degree view. We assure you that car will still look as pleasing as they currently are, after all, companies like Rolls Royce itself utilizes a 360 degree* camera setup.
+            </p>
+          </div>
+          <div class="faq pad20"><input id="faq-dropdown-4-1" type="checkbox" name="faq" class="faq-input"> <label for="faq-dropdown-4-1" class="faq-label flex spread center-horizontal"><span class="bold primary-color mr20">Are we eliminating investigators completely?</span> <svg width="15px" height="9px" viewBox="0 0 15 9" version="1.1" xmlns="http://www.w3.org/2000/svg" class="noshrink svg-fill">
+                <path d="M7.4176407,5.65342711 L1.76421359,8.8817842e-16 L0.350000024,1.41421356 L6.00342714,7.06764068 L6,7.07106781 L7.41421356,8.48528137 L7.4176407,8.48185424 L7.42106784,8.48528137 L8.8352814,7.07106781 L8.83185426,7.06764068 L14.4852814,1.41421356 L13.0710678,8.8817842e-16 L7.4176407,5.65342711 Z"></path>
+              </svg></label>
+            <p class="paragraph secondary-color faq-content mt20 launchaco-builder-hoverable">
+              We would be really glad if we could accomplish such a feat. We, however, only ease the process of insurance claiming and bring transparency such that both the claimer and the Bank can meet in the middle ground and settle the claims. This itself will reduce the expenditure and the loss incurred from both claimers and Bank's end significantly.
+            </p>
+          </div>
+          <div class="faq pad20"><input id="faq-dropdown-4-2" type="checkbox" name="faq" class="faq-input"> <label for="faq-dropdown-4-2" class="faq-label flex spread center-horizontal"><span class="bold primary-color mr20">What if the cameras themselves are damaged during the accident?</span> <svg width="15px" height="9px" viewBox="0 0 15 9" version="1.1" xmlns="http://www.w3.org/2000/svg" class="noshrink svg-fill">
+                <path d="M7.4176407,5.65342711 L1.76421359,8.8817842e-16 L0.350000024,1.41421356 L6.00342714,7.06764068 L6,7.07106781 L7.41421356,8.48528137 L7.4176407,8.48185424 L7.42106784,8.48528137 L8.8352814,7.07106781 L8.83185426,7.06764068 L14.4852814,1.41421356 L13.0710678,8.8817842e-16 L7.4176407,5.65342711 Z"></path>
+              </svg></label>
+            <p class="paragraph secondary-color faq-content mt20 launchaco-builder-hoverable">
+              An accident detection leads to immediate transfer of data to the servers and to the blockchain network. Moreover, we keep the data stored locally as well in case of a critical damage situation. If that was not enough, we're already looking at distributed storage solutions where car systems act as peers and interact. We unfortunately could not find one that met our expectations during the build phase but that does not stop us from exploring the field.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <footer id="footer-5" class="section text-center black-black" sitemeta="[object Object]" activepage="Landing">
+      <div class="container col-12">
+        <!---->
+        <div>
+          <!---->
+          <!---->
+          <!---->
+        </div>
+        <!---->
+      </div>
+    </footer>
+    <section id="checklist-6" class="section black-white" sitemeta="[object Object]" activepage="Landing">
+      <div class="container text-center mb75">
+        <div class="col-12">
+          <h3 class="heading primary-color launchaco-builder-hoverable">Tech Stack</h3>
+          <p class="subheading secondary-color mt20 launchaco-builder-hoverable">We make use of a diverse tech stack to achieve the goals we envision.</p>
+        </div>
+      </div>
+      <div class="container flex">
+        <ul class="checklist col-12">
+          <li class="checklist-item flex center-horizontal spread pad10 launchaco-builder-hoverable">
+            <p class="paragraph primary-color mr20">Solidity</p> <svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="noshrink svg-fill">
+              <g transform="translate(4.000000, 5.000000)">
+                <path d="M5.24961475,8.39956394 L2.16512063,5.35475362 C1.74038521,4.93548271 1.05017933,4.9352057 0.624646383,5.35526395 C0.199019838,5.77541456 0.198881924,6.45614266 0.624129379,6.8759191 L4.35212111,10.555948 C4.38658274,10.6034965 4.42544251,10.6488955 4.46870038,10.6915969 C4.70907746,10.9288814 5.03375662,11.0320952 5.3475228,11.0013023 C5.59592563,10.9812599 5.83876209,10.8774981 6.02880771,10.6898975 C6.06831079,10.6509027 6.10414872,10.6096632 6.13632157,10.5665961 L13.9850992,2.81879759 C14.4107939,2.39857976 14.410861,1.71746456 13.985328,1.29740632 C13.5597015,0.8772557 12.8697673,0.877449143 12.444108,1.29763217 L5.24961475,8.39956394 Z"></path>
+              </g>
+            </svg>
+          </li>
+          <li class="checklist-item flex center-horizontal spread pad10 launchaco-builder-hoverable">
+            <p class="paragraph primary-color mr20">Flask</p> <svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="noshrink svg-fill">
+              <g transform="translate(4.000000, 5.000000)">
+                <path d="M5.24961475,8.39956394 L2.16512063,5.35475362 C1.74038521,4.93548271 1.05017933,4.9352057 0.624646383,5.35526395 C0.199019838,5.77541456 0.198881924,6.45614266 0.624129379,6.8759191 L4.35212111,10.555948 C4.38658274,10.6034965 4.42544251,10.6488955 4.46870038,10.6915969 C4.70907746,10.9288814 5.03375662,11.0320952 5.3475228,11.0013023 C5.59592563,10.9812599 5.83876209,10.8774981 6.02880771,10.6898975 C6.06831079,10.6509027 6.10414872,10.6096632 6.13632157,10.5665961 L13.9850992,2.81879759 C14.4107939,2.39857976 14.410861,1.71746456 13.985328,1.29740632 C13.5597015,0.8772557 12.8697673,0.877449143 12.444108,1.29763217 L5.24961475,8.39956394 Z"></path>
+              </g>
+            </svg>
+          </li>
+          <li class="checklist-item flex center-horizontal spread pad10 launchaco-builder-hoverable">
+            <p class="paragraph primary-color mr20">Android</p> <svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="noshrink svg-fill">
+              <g transform="translate(4.000000, 5.000000)">
+                <path d="M5.24961475,8.39956394 L2.16512063,5.35475362 C1.74038521,4.93548271 1.05017933,4.9352057 0.624646383,5.35526395 C0.199019838,5.77541456 0.198881924,6.45614266 0.624129379,6.8759191 L4.35212111,10.555948 C4.38658274,10.6034965 4.42544251,10.6488955 4.46870038,10.6915969 C4.70907746,10.9288814 5.03375662,11.0320952 5.3475228,11.0013023 C5.59592563,10.9812599 5.83876209,10.8774981 6.02880771,10.6898975 C6.06831079,10.6509027 6.10414872,10.6096632 6.13632157,10.5665961 L13.9850992,2.81879759 C14.4107939,2.39857976 14.410861,1.71746456 13.985328,1.29740632 C13.5597015,0.8772557 12.8697673,0.877449143 12.444108,1.29763217 L5.24961475,8.39956394 Z"></path>
+              </g>
+            </svg>
+          </li>
+          <li class="checklist-item flex center-horizontal spread pad10 launchaco-builder-hoverable">
+            <p class="paragraph primary-color mr20">Hasura GraphQL</p> <svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="noshrink svg-fill">
+              <g transform="translate(4.000000, 5.000000)">
+                <path d="M5.24961475,8.39956394 L2.16512063,5.35475362 C1.74038521,4.93548271 1.05017933,4.9352057 0.624646383,5.35526395 C0.199019838,5.77541456 0.198881924,6.45614266 0.624129379,6.8759191 L4.35212111,10.555948 C4.38658274,10.6034965 4.42544251,10.6488955 4.46870038,10.6915969 C4.70907746,10.9288814 5.03375662,11.0320952 5.3475228,11.0013023 C5.59592563,10.9812599 5.83876209,10.8774981 6.02880771,10.6898975 C6.06831079,10.6509027 6.10414872,10.6096632 6.13632157,10.5665961 L13.9850992,2.81879759 C14.4107939,2.39857976 14.410861,1.71746456 13.985328,1.29740632 C13.5597015,0.8772557 12.8697673,0.877449143 12.444108,1.29763217 L5.24961475,8.39956394 Z"></path>
+              </g>
+            </svg>
+          </li>
+          <li class="checklist-item flex center-horizontal spread pad10 launchaco-builder-hoverable">
+            <p class="paragraph primary-color mr20">JavaScript</p> <svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="noshrink svg-fill">
+              <g transform="translate(4.000000, 5.000000)">
+                <path d="M5.24961475,8.39956394 L2.16512063,5.35475362 C1.74038521,4.93548271 1.05017933,4.9352057 0.624646383,5.35526395 C0.199019838,5.77541456 0.198881924,6.45614266 0.624129379,6.8759191 L4.35212111,10.555948 C4.38658274,10.6034965 4.42544251,10.6488955 4.46870038,10.6915969 C4.70907746,10.9288814 5.03375662,11.0320952 5.3475228,11.0013023 C5.59592563,10.9812599 5.83876209,10.8774981 6.02880771,10.6898975 C6.06831079,10.6509027 6.10414872,10.6096632 6.13632157,10.5665961 L13.9850992,2.81879759 C14.4107939,2.39857976 14.410861,1.71746456 13.985328,1.29740632 C13.5597015,0.8772557 12.8697673,0.877449143 12.444108,1.29763217 L5.24961475,8.39956394 Z"></path>
+              </g>
+            </svg>
+          </li>
+          <li class="checklist-item flex center-horizontal spread pad10 launchaco-builder-hoverable">
+            <p class="paragraph primary-color mr20">Google Cloud Services</p> <svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="noshrink svg-fill">
+              <g transform="translate(4.000000, 5.000000)">
+                <path d="M5.24961475,8.39956394 L2.16512063,5.35475362 C1.74038521,4.93548271 1.05017933,4.9352057 0.624646383,5.35526395 C0.199019838,5.77541456 0.198881924,6.45614266 0.624129379,6.8759191 L4.35212111,10.555948 C4.38658274,10.6034965 4.42544251,10.6488955 4.46870038,10.6915969 C4.70907746,10.9288814 5.03375662,11.0320952 5.3475228,11.0013023 C5.59592563,10.9812599 5.83876209,10.8774981 6.02880771,10.6898975 C6.06831079,10.6509027 6.10414872,10.6096632 6.13632157,10.5665961 L13.9850992,2.81879759 C14.4107939,2.39857976 14.410861,1.71746456 13.985328,1.29740632 C13.5597015,0.8772557 12.8697673,0.877449143 12.444108,1.29763217 L5.24961475,8.39956394 Z"></path>
+              </g>
+            </svg>
+          </li>
+        </ul>
+      </div>
+      <!---->
+    </section>
+    <footer id="footer-7" class="section text-center black-black" sitemeta="[object Object]" activepage="Landing">
+      <div class="container col-12">
+        <nav class="mb50"><a target="_blank" href="" class="nav-link secondary-color">Made with ❤</a></nav>
+        <div>
+          <!---->
+          <!---->
+          <!----><a href="https://github.com/aagarwal1012/Claim-It" target="_blank" class="socialicons accent-bg github"></a></div>
+        <div class="mt50"><span class="span secondary-color">©</span> <span class="span secondary-color">Copyright 2019 0x1337AF</span></div>
+      </div>
+    </footer>
+
+    <a id="visual-dreamer" class="launchaco-promo" target="_blank" href="https://www.launchaco.com/">
+      <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient x1="9.394%" y1="57.704%" x2="105.69%" y2="27.607%" id="a">
+            <stop stop-color="#007FFF" offset="0%" />
+            <stop stop-color="#1290FC" offset="100%" />
+          </linearGradient>
+          <linearGradient x1="50%" y1="0%" x2="50%" y2="137.557%" id="b">
+            <stop stop-color="#FF9386" offset="0%" />
+            <stop stop-color="#FF5F86" offset="100%" />
+          </linearGradient>
+          <linearGradient x1="30.817%" y1="-31.6%" x2="63.808%" y2="151.297%" id="c">
+            <stop stop-color="#D7EDFF" offset="0%" />
+            <stop stop-color="#FFF" stop-opacity="0" offset="100%" />
+          </linearGradient>
+        </defs>
+        <g fill="none">
+          <circle fill="url(#a)" cx="19.832" cy="19.832" r="19.832" />
+          <path d="M26.616.325l4.308 12.587-4.669-.315L26.218.388c0-.105.091-.19.204-.191.088 0 .166.051.194.128z" fill="url(#b)" transform="rotate(45 28.571 6.555)" />
+          <path d="M32.031 35.658c-6.164 2.721-12.745-4.33-11.992-10.011 2.617.782 4.626.997 7.904 2.01 2.34.769 4.152.479 5.386-1.13 1.234-1.607 1.316-3.502 0-5.158-4.826-5.49 0 0-10.516-12.264l2.923-2.95C.117 4.123 5.302 32.333 6.903 35.095c4.01 3.54 14.11 8.709 25.128.563z" fill="#FFF" />
+          <path d="M9.782 19.176l-.034-.016c0 5.76 4.425 21.794 22.185 16.378-6.148 2.716-12.71-4.29-12.006-9.97a7.394 7.394 0 0 1-2.73.519c-3.922 0-7.135-3.047-7.415-6.911z" fill="url(#c)" />
+          <ellipse fill="#354158" cx="22.185" cy="14.958" rx="2.017" ry="1.849" />
+          <ellipse fill="#354158" cx="22.185" cy="14.958" rx="2.017" ry="1.849" />
+        </g>
+      </svg>
+      <div class="launchaco-promo-speechbubble launchaco-promo-speechbubble__animate">Built With Launchaco</div>
+      <div class="launchaco-promo-speechbubble">Built With Launchaco</div>
+    </a>
+  </body>
+
+  <script>
+    window.onscroll = function()
+    {
+      showAd()
+    }
+
+    function showAd()
+    {
+      var scrollBarPosition = window.pageYOffset | document.body.scrollTop;
+
+      // At specifiv position do what you want
+      if (scrollBarPosition > 300)
+      {
+        document.getElementById("visual-dreamer").className = "launchaco-promo launchaco-promo__active";
+        window.onscroll = function() {};
+      }
+    }
+  </script>
+
+</html>
