@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -40,16 +41,6 @@ import java.util.TimerTask;
 
 public class MainActivity extends Activity implements SensorEventListener {
 
-    private static final int FORCE_THRESHOLD = 10000;
-    private static final int TIME_THRESHOLD = 75;
-    private static final int SHAKE_TIMEOUT = 500;
-    private static final int SHAKE_DURATION = 150;
-    private static final int SHAKE_COUNT = 1;
-    private int mShakeCount = 0;
-    private long mLastShake;
-    private long mLastForce;
-    private float mLastX = -1.0f, mLastY = -1.0f, mLastZ = -1.0f;
-    private long mLastTime;
     float x,y,z;
     private float[] mGravity = { 0.0f, 0.0f, 0.0f };
     private float[] mLinearAcceleration = { 0.0f, 0.0f, 0.0f };
@@ -71,7 +62,6 @@ public class MainActivity extends Activity implements SensorEventListener {
     int quality = 0;
     int rate = 100;
     String timeStampFile;
-    int clickFlag = 0;
     Timer timer;
     int VideoFrameRate = 24;
     LocationListener locationListener;
@@ -83,11 +73,9 @@ public class MainActivity extends Activity implements SensorEventListener {
     double longitude = 0;
     double latitude_original = 0;
     double longitude_original = 0;
-    //float distance = 0;
     float speed = 0;
     float dist[] = {0, 0, 0};
     PrintWriter writer = null;
-    long timechecker = 5000;
 
     String[] options = {"1080p", "720p", "480p"};
     String[] options1 = {"15 Hz", "10 Hz"};
@@ -106,70 +94,86 @@ public class MainActivity extends Activity implements SensorEventListener {
     OnClickListener captureListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
+            Timer timer = new Timer ();
 
             if (recording) {
+                Log.e("rec,", "end");
                 // stop recording and release camera
+                timer.cancel();
+                timer.purge();
                 mediaRecorder.stop(); // stop the recording
                 releaseMediaRecorder(); // release the MediaRecorder object
                 Toast.makeText(MainActivity.this, "Video captured!", Toast.LENGTH_LONG).show();
                 recording = false;
-                //d.exportData();
                 chrono.stop();
                 chrono.setBase(SystemClock.elapsedRealtime());
 
                 chrono.start();
                 chrono.stop();
                 txt.setTextColor(-16711936);
-                //chrono.setBackgroundColor(0);
                 enddata();
-/*
-                if(clickFlag == 1){
-                    clickFlag = 0;
-                    capture.performClick();
-                }
-*/
+
             } else {
-                timeStampFile = String.valueOf((new Date()).getTime());
-                File wallpaperDirectory = new File(Environment.getExternalStorageDirectory().getPath() + "/elab/");
-                wallpaperDirectory.mkdirs();
-
-                File wallpaperDirectory1 = new File(Environment.getExternalStorageDirectory().getPath() + "/elab/" + timeStampFile);
-                wallpaperDirectory1.mkdirs();
-                if (!prepareMediaRecorder()) {
-                    Toast.makeText(MainActivity.this, "Fail in prepareMediaRecorder()!\n - Ended -", Toast.LENGTH_LONG).show();
-                    finish();
-                }
-
-                // work on UiThread for better performance
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        try {
-                            mediaRecorder.start();
-                        } catch (final Exception ex) {
-                        }
-                    }
-                });
+                Log.e("rec", "start");
                 Toast.makeText(MainActivity.this, "Recording...", Toast.LENGTH_LONG).show();
 
-                Camera.Parameters params = mCamera.getParameters();
-                params.setPreviewFpsRange(30000, 30000); // 30 fps
-                if (params.isAutoExposureLockSupported())
-                    params.setAutoExposureLock(true);
 
-                params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
-                mCamera.setParameters(params);
-                //d.beginData();
-                storeData();
-                chrono.setBase(SystemClock.elapsedRealtime());
+                TimerTask hourlyTask = new TimerTask () {
+                    @Override
+                    public void run() {
+                        // your code here...
+                        timeStampFile = String.valueOf((new Date()).getTime());
+                        File wallpaperDirectory = new File(Environment.getExternalStorageDirectory().getPath() + "/claimit/");
+                        wallpaperDirectory.mkdirs();
 
-                chrono.start();
-                //chrono.setBackgroundColor(-65536);
-                txt.setTextColor(-65536);
-                recording = true;
+                        File wallpaperDirectory1 = new File(Environment.getExternalStorageDirectory().getPath() + "/claimit/" + "data");
+                        wallpaperDirectory1.mkdirs();
+                        if (!prepareMediaRecorder()) {
+                            Toast.makeText(MainActivity.this, "Fail in prepareMediaRecorder()!\n - Ended -", Toast.LENGTH_LONG).show();
+                            finish();
+                        }
 
-            }
-        }
-    };
+                        try {
+                            mediaRecorder.start();
+                        } catch (final Exception ex) {}
+
+                        runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void run() {
+
+                                // Stuff that updates the UI
+
+                                Camera.Parameters params = mCamera.getParameters();
+                                params.setPreviewFpsRange(30000, 30000); // 30 fps
+                                if (params.isAutoExposureLockSupported())
+                                    params.setAutoExposureLock(true);
+
+                                //params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+                                //mCamera.setParameters(params);
+                                //d.beginData();
+                                storeData();
+                                chrono.setBase(SystemClock.elapsedRealtime());
+
+                                chrono.start();
+                                //chrono.setBackgroundColor(-65536);
+                                txt.setTextColor(-65536);
+                                recording = true;
+
+                            }
+                        });
+
+
+                        }
+                    };
+                timer.schedule(hourlyTask,01,30000);
+                }
+
+
+                }
+
+        };
+
     private SensorManager sensorManager;
     private Sensor accelerometer;
     private Sensor gyro;
@@ -181,9 +185,7 @@ public class MainActivity extends Activity implements SensorEventListener {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         myContext = this;
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        //accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
-        //head = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION);
-        //gyro = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         gyro = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
 
@@ -265,13 +267,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 
         // Register the listener with the Location Manager to receive location updates
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+
             return;
         }
         LM.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
@@ -327,9 +323,8 @@ public class MainActivity extends Activity implements SensorEventListener {
         else if (quality == 2)
             mediaRecorder.setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_480P));
 
-        mediaRecorder.setOutputFile(Environment.getExternalStorageDirectory().getPath() + "/elab/" + timeStampFile + "/" + timeStampFile + ".mp4");
+        mediaRecorder.setOutputFile(Environment.getExternalStorageDirectory().getPath() + "/claimit/" + "data" + "/" + "video" + ".mp4");
         mediaRecorder.setVideoFrameRate(VideoFrameRate);
-        //mediaRecorder.setMaxDuration(5000);
 
         try {
             mediaRecorder.prepare();
@@ -354,7 +349,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     public void storeData() {
 
-        String filePath = Environment.getExternalStorageDirectory().getPath() + "/elab/" + timeStampFile + "/" + timeStampFile + ".csv";
+        String filePath = Environment.getExternalStorageDirectory().getPath() + "/claimit/" + "data" + "/" + "sensor_data" + ".csv";
         try {
             writer = new PrintWriter(filePath);
         } catch (FileNotFoundException e) {
@@ -366,24 +361,12 @@ public class MainActivity extends Activity implements SensorEventListener {
                 "Acc x" + "," + "Acc Y" + "," + "Acc Z" + "," + "gyro_x" + "," + "gyro_y" + "," + "gyro_z");
         LocationManager original = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+
             return;
         }
         Location original_location = original.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+
             return;
         }
         if (original.getLastKnownLocation(LocationManager.GPS_PROVIDER) != null) {
