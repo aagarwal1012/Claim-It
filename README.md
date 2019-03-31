@@ -88,7 +88,7 @@ locally on port 1337.
 ### Android
 
 To simplify the user end, we have provided the link for the apk. Install the 
-(APK)[https://drive.google.com/open?id=1he3rvAK6NW9y4zLg_o5k6_-q75IIRXCY] and play around.
+[APK](https://drive.google.com/open?id=1he3rvAK6NW9y4zLg_o5k6_-q75IIRXCY) and play around.
 
 ## License
 
